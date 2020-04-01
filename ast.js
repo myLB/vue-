@@ -128,3 +128,4 @@ let ast = {
   // 一下均为转化成渲染表达式
   staticProcessed: true,//表示已经静态根标签转化为表达式
 }
+

@@ -35,7 +35,7 @@ const strats = config.optionMergeStrategies
           `option "${key}" can only be used during instance ` +
           'creation with the `new` keyword.'
         )
-      } 
+      }
       return child === undefined ? parent : child
     },
     propsData: function (parent, child, vm, key) {
@@ -763,11 +763,13 @@ export function mergeOptions (
   normalizeInject(child, vm) //规范化Inject
   normalizeDirectives(child) //规范化Directives
   const extendsFrom = child.extends //缓存extends属性为extendsFrom
+  // 合并extends中的属性合并到vue函数或父组件构造函数的options属性中
   if (extendsFrom) {
     //重新赋值parent为一个原parent和extendsFrom合并的全新对象
     parent = mergeOptions(parent, extendsFrom, vm)
   }
   //存在mixins属性并循环赋值parent为一个原parent和mixins[i]合并的全新对象
+  // 合并mixins中的属性合并到vue函数或父组件构造函数的options属性中
   if (child.mixins) {
     for (let i = 0, l = child.mixins.length; i < l; i++) {
       parent = mergeOptions(parent, child.mixins[i], vm)

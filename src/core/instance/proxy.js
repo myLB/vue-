@@ -25,7 +25,7 @@ if (process.env.NODE_ENV !== 'production') {
   }
   //判断是否支持ES6的Proxy或存在Proxy函数
   const hasProxy =
-    typeof Proxy !== 'undefined' && isNative(Proxy)
+    typeof Proxy !== 'undefined' && isNative(Proxy);
   //支持ES6的Proxy或存在Proxy函数
   if (hasProxy) {
     //缓存一个判断参数是否存在于下面参数中的函数

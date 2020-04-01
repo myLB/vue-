@@ -36,15 +36,15 @@ export function createCompilerCreator (baseCompile: Function): Function {
       finalOptions.warn = (msg, tip) => {
         (tip ? tips : errors).push(msg)
       }
-      //判断option是否有传入($mount中传入的option)
+      //判断CompilerOptions是否有传入
       if (options) {
-        // merge custom modules
+        // merge custom modules 合并自定义的解析模块的对象(我估计是不同的运行环境需要不同的处理)
         if (options.modules) {
           //合并为新数组
           finalOptions.modules =
             (baseOptions.modules || []).concat(options.modules)
         }
-        // merge custom directives
+        // merge custom directives 合并自定义的解析指令函数
         // 判断options对象中是否存在directives属性(在调用compileToFunctions中是否传入了)
         /*
           {
@@ -62,7 +62,7 @@ export function createCompilerCreator (baseCompile: Function): Function {
           )
         }
         // copy other options
-        //循环将options中的key和key值复制到finalOptions对象中
+        //将CompilerOptions中的key值添加或替换到finalOptions中(除modules和directives不替换)
         for (const key in options) {
           if (key !== 'modules' && key !== 'directives') {
             finalOptions[key] = options[key]

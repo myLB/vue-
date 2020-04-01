@@ -95,7 +95,7 @@ export function parse (
   let inVPre = false // 标识当前解析的标签是否在拥有 v-pre 的标签之内
   let inPre = false // 标识当前正在解析的标签是否在 <pre></pre> 标签之内
   let warned = false
-  //执行一次错误提示
+  //只收集一次错误信息
   function warnOnce (msg) {
     if (!warned) {
       warned = true
@@ -197,6 +197,7 @@ export function parse (
         inPre = true
       }
       if (inVPre) {
+        //将所有的属性值变成静态的字符串属性值
         processRawAttrs(element)
       } else if (!element.processed) {
         // structural directives
@@ -418,7 +419,7 @@ export function processElement (element: ASTElement, options: CompilerOptions) {
 
   // determine whether this is a plain element after
   // removing structural attributes
-  element.plain = !element.key && !element.attrsList.length
+  element.plain = !element.key && !element.attrsList.length//表示没有任何属性的标签
 
   processRef(element)
   processSlot(element)
@@ -685,7 +686,7 @@ function processSlot (el) {
       el.slotTarget = slotTarget === '""' ? '"default"' : slotTarget
       // preserve slot as an attribute for native shadow DOM compat
       // only for non-scoped slots.
-      /* 当标签名为template时 && 不存在slot-scope属性值时往标签的attrs数组中添加保存slot属性信息的对象*/
+      /* 当标签名不为template时 && 不存在slot-scope属性值时往标签的attrs数组中添加保存slot属性信息的对象(slot: slot的属性值)*/
       if (el.tag !== 'template' && !el.slotScope) {
         addAttr(el, 'slot', slotTarget)
       }
@@ -730,7 +731,7 @@ function processAttrs (el) {
       modifiers = parseModifiers(name)
       // 存在修饰符时将缓存去除修饰符后的属性名    const modifierRE = /\.[^.]+/g
       if (modifiers) {
-        name = name.replace(modifierRE, '')
+        name = name.replace(modifierRE, '') //去掉修饰符
       }
       /* 便于理解: const bindRE = /^:|^v-bind:/ */
       // 当属性为绑定属性时
@@ -793,7 +794,7 @@ function processAttrs (el) {
         /* 便于理解: const argRE = /:(.*)$/ */
         // 获取指令的参数(:参数名) 比如: model:foo.a.b
         const argMatch = name.match(argRE)
-        // 获取指令的参数名 比如 foo.a.b
+        // 获取指令的参数名 比如 foo
         const arg = argMatch && argMatch[1]
         // 参数名存在时,获取指令名 比如model
         if (arg) {
